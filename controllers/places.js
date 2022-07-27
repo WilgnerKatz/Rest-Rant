@@ -6,7 +6,6 @@ router.get('/', (req, res) => {
 })
 
 router.post('/', (req, res) => {
-    console.log(req.body)
     if (!req.body.pic) {
       // Default image if one is not provided
       req.body.pic = 'http://placekitten.com/400/400'
@@ -26,7 +25,16 @@ router.get('/new', (req, res) => {
 })
 
 router.get('/:id', (req, res) => {
-    res.send('GET /places/:id stub')
+    let id = Number(req.params.id)
+    if (isNaN(id)) {
+        res.render('error404')
+    }
+    else if (!places[id]) {
+        res.render('error404')
+    }
+    else {
+        res.render('places/show', { place: places[id], id })
+    }
 })
 
 router.put('/:id', (req, res) => {
@@ -34,7 +42,17 @@ router.put('/:id', (req, res) => {
 })
 
 router.delete('/:id', (req, res) => {
-    res.send('DELETE /places/:id stub')
+    let id = Number(req.params.id)
+    if (isNaN(id)) {
+        res.render('error404')
+    }
+    else if (!places[id]) {
+        res.render('error404')
+    }
+    else { 
+        places.splice(id, 1)
+        res.redirect('/places')
+    }
 })
 
 router.get('/:id/edit', (req, res) => {
@@ -50,7 +68,4 @@ router.delete('/:id/rant/:rantId', (req, res) => {
 })
 
 
-
 module.exports = router
-
-
